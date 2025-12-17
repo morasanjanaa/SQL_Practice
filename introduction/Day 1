@@ -1,0 +1,156 @@
+
+/* ===============================
+   SAMPLE DATA
+   =============================== */
+
+CREATE TABLE departments (
+    dept_id INT,
+    dept_name VARCHAR(20)
+);
+
+INSERT INTO departments VALUES
+(101, 'HR'),
+(102, 'IT'),
+(103, 'Finance');
+
+
+CREATE TABLE employees (
+    emp_id INT,
+    name VARCHAR(20),
+    dept_id INT,
+    salary INT
+);
+
+INSERT INTO employees VALUES
+(1, 'Alice', 101, 50000),
+(2, 'Bob', 102, 60000),
+(3, 'Charlie', 101, 55000),
+(4, 'David', 103, 70000),
+(5, 'Eva', 102, 60000);
+
+
+
+/* ===============================
+   SELECT + FROM
+   =============================== */
+
+SELECT name, salary
+FROM employees;
+
+-- Output:
+-- Alice   50000
+-- Bob     60000
+-- Charlie 55000
+-- David   70000
+-- Eva     60000
+
+
+
+/* ===============================
+   DISTINCT
+   =============================== */
+
+SELECT DISTINCT salary
+FROM employees;
+
+-- Output:
+-- 50000
+-- 60000
+-- 55000
+-- 70000
+
+
+
+/* ===============================
+   TOP (SQL Server)
+   =============================== */
+
+-- Use LIMIT in MySQL/PostgreSQL
+SELECT TOP 3 name, salary
+FROM employees
+ORDER BY salary DESC;
+
+-- Output:
+-- David  70000
+-- Bob    60000
+-- Eva    60000
+
+
+
+/* ===============================
+   WHERE
+   =============================== */
+
+SELECT name, dept_id
+FROM employees
+WHERE salary > 55000;
+
+-- Output:
+-- Bob    102
+-- David  103
+-- Eva    102
+
+
+
+/* ===============================
+   JOIN
+   =============================== */
+
+SELECT e.name, d.dept_name
+FROM employees e
+JOIN departments d
+ON e.dept_id = d.dept_id;
+
+-- Output:
+-- Alice   HR
+-- Bob     IT
+-- Charlie HR
+-- David   Finance
+-- Eva     IT
+
+
+
+/* ===============================
+   GROUP BY
+   =============================== */
+
+SELECT dept_id, COUNT(*) AS employee_count
+FROM employees
+GROUP BY dept_id;
+
+-- Output:
+-- 101  2
+-- 102  2
+-- 103  1
+
+
+
+/* ===============================
+   HAVING
+   =============================== */
+
+SELECT dept_id, COUNT(*) AS employee_count
+FROM employees
+GROUP BY dept_id
+HAVING COUNT(*) > 1;
+
+-- Output:
+-- 101  2
+-- 102  2
+
+
+
+/* ===============================
+   ORDER BY
+   =============================== */
+
+SELECT name, salary
+FROM employees
+ORDER BY salary DESC;
+
+-- Output:
+-- David   70000
+-- Bob     60000
+-- Eva     60000
+-- Charlie 55000
+-- Alice   50000
