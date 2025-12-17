@@ -1,91 +1,179 @@
+/* =====================================================
+   STUDENT TABLE – DDL & DML PRACTICE (SQL SERVER)
+   ===================================================== */
+
+
 /* ===============================
-   DDL COMMANDS – SAMPLE DATASET
+   CREATE TABLE
    =============================== */
 
-
-/* CREATE TABLE */
-
-CREATE TABLE students (
-    student_id INT,
-    name VARCHAR(20),
+CREATE TABLE student (
+    id INT NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    course VARCHAR(40) NOT NULL,
     age INT,
-    course VARCHAR(20)
+    CONSTRAINT pk_student PRIMARY KEY (id)
 );
 
 -- Output:
--- Table created
+-- Table 'student' created
 
 
-/* INSERT SAMPLE DATA (4 rows) */
 
-INSERT INTO students VALUES
-(1, 'Asha', 20, 'CSE'),
-(2, 'Ravi', 21, 'ECE'),
-(3, 'Neha', 19, 'IT'),
-(4, 'Kiran', 22, 'CSE');
+/* ===============================
+   INSERT SAMPLE DATA
+   =============================== */
 
--- Output:
--- 4 rows inserted
-
-
-/* DESCRIBE / STRUCTURE */
-
--- MySQL / Oracle
-DESC students;
-
--- SQL Server
--- EXEC sp_help students;
+INSERT INTO student VALUES
+(1, 'Sanjana', 'DS', 19),
+(2, 'Shriya',  'ECE', 20),
+(3, 'Shruti',  'CSE', 20),
+(4, 'Yashu',   'AIML', 50);
 
 -- Output:
--- student_id  INT
--- name        VARCHAR(20)
--- age         INT
--- course      VARCHAR(20)
+-- (4 rows affected)
 
 
-/* ALTER TABLE – ADD COLUMN */
 
-ALTER TABLE students
+/* ===============================
+   ALTER TABLE – ADD COLUMN
+   =============================== */
+
+ALTER TABLE student
 ADD email VARCHAR(30);
 
 -- Output:
--- Table altered
+-- Column 'email' added
 
 
-/* ALTER TABLE – MODIFY COLUMN */
 
--- MySQL / Oracle
-ALTER TABLE students
-MODIFY name VARCHAR(30);
+/* ===============================
+   ALTER TABLE – ALTER COLUMN
+   (SQL Server uses ALTER COLUMN)
+   =============================== */
 
--- SQL Server
--- ALTER TABLE students ALTER COLUMN name VARCHAR(30);
-
--- Output:
--- Table altered
-
-
-/* ALTER TABLE – DROP COLUMN */
-
-ALTER TABLE students
-DROP COLUMN email;
+ALTER TABLE student
+ALTER COLUMN email VARCHAR(70);
 
 -- Output:
--- Column dropped
+-- Column 'email' size increased
 
 
-/* TRUNCATE TABLE */
 
-TRUNCATE TABLE students;
+/* ===============================
+   UPDATE DATA
+   =============================== */
+
+-- Update name and email for a single student
+UPDATE student
+SET email = 'sanjana@gmail.com',
+    name  = 'MoraSanjana'
+WHERE id = 1;
+
+-- Update emails for remaining students
+UPDATE student SET email = 'shriya@gmail.com' WHERE id = 2;
+UPDATE student SET email = 'shruti@gmail.com' WHERE id = 3;
+UPDATE student SET email = 'yashu@gmail.com'  WHERE id = 4;
 
 -- Output:
--- Table truncated
--- Data removed, structure remains
+-- (4 rows affected)
 
 
-/* DROP TABLE */
 
-DROP TABLE students;
+/* ===============================
+   VERIFY DATA
+   =============================== */
+
+SELECT * FROM student;
 
 -- Output:
--- Table dropped
+-- 1  MoraSanjana  DS    19  sanjana@gmail.com
+-- 2  Shriya       ECE   20  shriya@gmail.com
+-- 3  Shruti       CSE   20  shruti@gmail.com
+-- 4  Yashu        AIML  50  yashu@gmail.com
+
+
+
+/* =====================================================
+   DEMO TABLE – DATA COPY & CLEANUP
+   ===================================================== */
+
+
+/* ===============================
+   CREATE DEMO TABLE
+   =============================== */
+
+CREATE TABLE demo (
+    id INT NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    course VARCHAR(40) NOT NULL,
+    age INT,
+    CONSTRAINT pk_demo PRIMARY KEY (id)
+);
+
+-- Output:
+-- Table 'demo' created
+
+
+
+/* ===============================
+   INSERT DATA FROM ANOTHER TABLE
+   =============================== */
+
+INSERT INTO demo (id, name, course, age)
+SELECT
+    id,
+    name,
+    course,
+    age
+FROM student;
+
+-- Output:
+-- (4 rows affected)
+
+
+
+/* ===============================
+   ALTER TABLE – DROP COLUMN
+   =============================== */
+
+ALTER TABLE demo
+DROP COLUMN age;
+
+-- Output:
+-- Column 'age' dropped
+
+
+
+/* ===============================
+   TRUNCATE TABLE
+   =============================== */
+
+TRUNCATE TABLE demo;
+
+-- Output:
+-- Table truncated (all rows removed)
+
+
+
+/* ===============================
+   DROP TABLE
+   =============================== */
+
+DROP TABLE demo;
+
+-- Output:
+-- Table 'demo' dropped
+
+
+
+/* ===============================
+   FINAL CHECK
+   =============================== */
+
+SELECT * FROM demo;
+
+-- Output:
+-- Error: Invalid object name 'demo'
+
+
