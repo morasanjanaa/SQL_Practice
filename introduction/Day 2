@@ -1,0 +1,91 @@
+/* ===============================
+   DDL COMMANDS – SAMPLE DATASET
+   =============================== */
+
+
+/* CREATE TABLE */
+
+CREATE TABLE students (
+    student_id INT,
+    name VARCHAR(20),
+    age INT,
+    course VARCHAR(20)
+);
+
+-- Output:
+-- Table created
+
+
+/* INSERT SAMPLE DATA (4 rows) */
+
+INSERT INTO students VALUES
+(1, 'Asha', 20, 'CSE'),
+(2, 'Ravi', 21, 'ECE'),
+(3, 'Neha', 19, 'IT'),
+(4, 'Kiran', 22, 'CSE');
+
+-- Output:
+-- 4 rows inserted
+
+
+/* DESCRIBE / STRUCTURE */
+
+-- MySQL / Oracle
+DESC students;
+
+-- SQL Server
+-- EXEC sp_help students;
+
+-- Output:
+-- student_id  INT
+-- name        VARCHAR(20)
+-- age         INT
+-- course      VARCHAR(20)
+
+
+/* ALTER TABLE – ADD COLUMN */
+
+ALTER TABLE students
+ADD email VARCHAR(30);
+
+-- Output:
+-- Table altered
+
+
+/* ALTER TABLE – MODIFY COLUMN */
+
+-- MySQL / Oracle
+ALTER TABLE students
+MODIFY name VARCHAR(30);
+
+-- SQL Server
+-- ALTER TABLE students ALTER COLUMN name VARCHAR(30);
+
+-- Output:
+-- Table altered
+
+
+/* ALTER TABLE – DROP COLUMN */
+
+ALTER TABLE students
+DROP COLUMN email;
+
+-- Output:
+-- Column dropped
+
+
+/* TRUNCATE TABLE */
+
+TRUNCATE TABLE students;
+
+-- Output:
+-- Table truncated
+-- Data removed, structure remains
+
+
+/* DROP TABLE */
+
+DROP TABLE students;
+
+-- Output:
+-- Table dropped
