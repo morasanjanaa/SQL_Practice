@@ -1,0 +1,337 @@
+/* =====================================================
+   BASE TABLE (ASSUMED EXISTING)
+   ===================================================== */
+
+-- customers(id, first_name, country, score)
+-- Data contains duplicates, NULL scores, multiple countries
+
+
+/* =====================================================
+   DDL – CREATE TABLE (ANSWERS)
+   ===================================================== */
+
+-- Q1: Create orders table
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY,
+    customer_id INT,
+    order_date DATE,
+    amount INT
+);
+-- Output: Table created
+
+
+-- Q2: Create employees table with PK and NOT NULL
+CREATE TABLE employees (
+    emp_id INT PRIMARY KEY,
+    name VARCHAR(40) NOT NULL,
+    salary INT NOT NULL
+);
+-- Output: Table created
+
+
+-- Q3: Create products with CHECK constraint
+CREATE TABLE products (
+    product_id INT PRIMARY KEY,
+    product_name VARCHAR(40),
+    price INT CHECK (price > 0)
+);
+-- Output: Table created (price <= 0 rejected)
+
+
+-- Q4: Create students with DEFAULT country
+CREATE TABLE students (
+    student_id INT PRIMARY KEY,
+    name VARCHAR(40),
+    country VARCHAR(30) DEFAULT 'India'
+);
+-- Output: Table created
+
+
+-- Q5: Create payments with composite primary key
+CREATE TABLE payments (
+    payment_id INT,
+    order_id INT,
+    amount INT,
+    CONSTRAINT pk_payments PRIMARY KEY (payment_id, order_id)
+);
+-- Output: Table created
+
+
+/* =====================================================
+   DDL – ALTER TABLE (ANSWERS)
+   ===================================================== */
+
+-- Q1: Add email column
+ALTER TABLE customers ADD email VARCHAR(50);
+-- Output: Column added
+
+
+-- Q2: Change datatype size of first_name
+ALTER TABLE customers ALTER COLUMN first_name VARCHAR(60);
+-- Output: Column altered
+
+
+-- Q3: Drop score column
+ALTER TABLE customers DROP COLUMN score;
+-- Output: Column dropped
+
+
+-- Q4: Add UNIQUE constraint on email
+ALTER TABLE customers
+ADD CONSTRAINT uq_customers_email UNIQUE (email);
+-- Output: Constraint added
+
+
+-- Q5: Rename first_name to name (SQL Server)
+EXEC sp_rename 'customers.first_name', 'name', 'COLUMN';
+-- Output: Column renamed
+
+
+/* =====================================================
+   DDL – DROP TABLE (ANSWERS)
+   ===================================================== */
+
+DROP TABLE payments;
+-- Output: Table dropped
+
+DROP TABLE IF EXISTS students;
+-- Output: Table dropped if existed
+
+DROP TABLE orders;
+-- Output: Table dropped
+
+DROP TABLE products;
+-- Output: Table dropped
+
+DROP TABLE employees;
+-- Output: Table dropped
+
+
+/* =====================================================
+   DML – INSERT (ANSWERS)
+   ===================================================== */
+
+-- Q1: Insert single record
+INSERT INTO customers VALUES (1, 'Asha', 'India', 200);
+-- Output: 1 row inserted
+
+
+-- Q2: Insert multiple records
+INSERT INTO customers VALUES
+(2, 'Ravi', 'USA', 300),
+(3, 'Neha', 'India', 150);
+-- Output: 2 rows inserted
+
+
+-- Q3: Insert into orders from customers
+INSERT INTO orders (customer_id)
+SELECT id FROM customers;
+-- Output: Rows inserted
+
+
+-- Q4: Insert selected columns
+INSERT INTO customers (id, first_name, country)
+VALUES (4, 'Kiran', 'UK');
+-- Output: score becomes NULL
+
+
+-- Q5: Insert NULL values
+INSERT INTO customers VALUES (5, 'Meena', 'India', NULL);
+-- Output: NULL inserted
+
+
+/* =====================================================
+   DML – UPDATE (ANSWERS)
+   ===================================================== */
+
+-- Q1: Update score to 0 where NULL
+UPDATE customers
+SET score = 0
+WHERE score IS NULL;
+-- Output: NULL scores updated
+
+
+-- Q2: Update country for specific customer
+UPDATE customers
+SET country = 'India'
+WHERE id = 2;
+-- Output: 1 row updated
+
+
+-- Q3: Increase score by 10 for all customers
+UPDATE customers
+SET score = score + 10;
+-- Output: All rows updated
+
+
+-- Q4: Update multiple columns
+UPDATE customers
+SET first_name = 'Sanjana',
+    country = 'India'
+WHERE id = 1;
+-- Output: 1 row updated
+
+
+-- Q5: Update customers from USA
+UPDATE customers
+SET score = 100
+WHERE country = 'USA';
+-- Output: Matching rows updated
+
+
+/* =====================================================
+   DML – DELETE (ANSWERS)
+   ===================================================== */
+
+-- Q1: Delete customer by id
+DELETE FROM customers WHERE id = 1;
+-- Output: 1 row deleted
+
+
+-- Q2: Delete customers with score < 50
+DELETE FROM customers WHERE score < 50;
+-- Output: Rows deleted
+
+
+-- Q3: Delete customers from country
+DELETE FROM customers WHERE country = 'UK';
+-- Output: Rows deleted
+
+
+-- Q4: Delete all records
+DELETE FROM customers;
+-- Output: Table empty
+
+
+-- Q5: Delete duplicate records (keep one)
+DELETE FROM customers
+WHERE id NOT IN (
+    SELECT MIN(id)
+    FROM customers
+    GROUP BY name, country
+);
+-- Output: Duplicates removed
+
+
+/* =====================================================
+   SELECT (ANSWERS)
+   ===================================================== */
+
+-- Q1
+SELECT * FROM customers;
+-- Output: All rows
+
+-- Q2
+SELECT first_name, country FROM customers;
+-- Output: Selected columns
+
+-- Q3
+SELECT first_name AS customer_name FROM customers;
+-- Output: Alias applied
+
+-- Q4
+SELECT DISTINCT country FROM customers;
+-- Output: Unique countries
+
+-- Q5
+SELECT * FROM customers WHERE score IS NULL;
+-- Output: NULL score records
+
+
+/* =====================================================
+   FROM (ANSWERS)
+   ===================================================== */
+
+SELECT * FROM customers;
+SELECT c.first_name FROM customers c;
+SELECT * FROM orders;
+SELECT id, country FROM customers;
+SELECT 'ACTIVE' AS status FROM customers;
+-- Output: Constant value repeated per row
+
+
+/* =====================================================
+   WHERE (ANSWERS)
+   ===================================================== */
+
+SELECT * FROM customers WHERE score > 100;
+SELECT * FROM customers WHERE country = 'India';
+SELECT * FROM customers WHERE score IS NULL;
+SELECT * FROM customers WHERE score BETWEEN 50 AND 100;
+SELECT * FROM customers WHERE first_name LIKE 'S%';
+
+
+/* =====================================================
+   DISTINCT (ANSWERS)
+   ===================================================== */
+
+SELECT DISTINCT country FROM customers;
+SELECT DISTINCT score FROM customers;
+SELECT DISTINCT first_name FROM customers;
+SELECT DISTINCT country, score FROM customers;
+SELECT COUNT(DISTINCT country) FROM customers;
+-- Output: Number of unique countries
+
+
+/* =====================================================
+   ORDER BY (ANSWERS)
+   ===================================================== */
+
+SELECT * FROM customers ORDER BY score ASC;
+SELECT * FROM customers ORDER BY score DESC;
+SELECT * FROM customers ORDER BY country, score;
+SELECT * FROM customers ORDER BY first_name;
+SELECT * FROM customers ORDER BY score DESC;
+
+
+/* =====================================================
+   TOP – SQL SERVER (ANSWERS)
+   ===================================================== */
+
+SELECT TOP 5 * FROM customers ORDER BY score DESC;
+SELECT TOP 3 * FROM customers ORDER BY score ASC;
+SELECT TOP 1 * FROM customers WHERE country = 'India';
+SELECT TOP 10 PERCENT * FROM customers ORDER BY score DESC;
+SELECT TOP 3 WITH TIES * FROM customers ORDER BY score DESC;
+
+
+/* =====================================================
+   GROUP BY (ANSWERS)
+   ===================================================== */
+
+SELECT country, COUNT(*) FROM customers GROUP BY country;
+SELECT country, AVG(score) FROM customers GROUP BY country;
+SELECT country, MAX(score) FROM customers GROUP BY country;
+SELECT score, COUNT(*) FROM customers GROUP BY score;
+SELECT COUNT(*) FROM customers WHERE score IS NULL;
+
+
+/* =====================================================
+   HAVING (ANSWERS)
+   ===================================================== */
+
+SELECT country, COUNT(*)
+FROM customers
+GROUP BY country
+HAVING COUNT(*) > 5;
+
+SELECT country, AVG(score)
+FROM customers
+GROUP BY country
+HAVING AVG(score) > 100;
+
+SELECT country, COUNT(*)
+FROM customers
+WHERE score IS NULL
+GROUP BY country;
+
+SELECT country, MAX(score)
+FROM customers
+GROUP BY country
+HAVING MAX(score) > 500;
+
+SELECT country, COUNT(*)
+FROM customers
+GROUP BY country
+HAVING COUNT(*) < 3;
+
