@@ -1,0 +1,145 @@
+/* =====================================================
+   Topics: DDL, DML, SELECT, WHERE, DISTINCT,
+           GROUP BY, HAVING, ORDER BY, TOP
+   Table: customers(id, name, country, score)
+   ===================================================== */
+
+
+/* ---------- DDL ---------- */
+
+-- Q1: What is DDL?
+-- A: Used to define or modify table structure
+CREATE TABLE demo(id INT);
+
+-- Q2: CREATE vs ALTER
+-- A: CREATE makes table, ALTER changes it
+ALTER TABLE customers ADD email VARCHAR(40);
+
+-- Q3: Duplicate in PRIMARY KEY?
+-- A: Error – PK must be unique
+
+-- Q4: DROP vs TRUNCATE
+-- A: DROP removes table, TRUNCATE removes rows
+TRUNCATE TABLE customers;
+
+-- Q5: Multiple UNIQUE constraints?
+-- A: Yes, but only one PRIMARY KEY
+
+
+/* ---------- DML ---------- */
+
+-- Q6: DELETE vs TRUNCATE
+-- A: DELETE supports WHERE, TRUNCATE doesn’t
+
+-- Q7: Update NULL values
+UPDATE customers SET score = 0 WHERE score IS NULL;
+
+-- Q8: UPDATE without WHERE?
+-- A: All rows updated
+
+-- Q9: INSERT without column names?
+-- A: Risky if table structure changes
+
+-- Q10: Delete all rows keep table
+DELETE FROM customers;
+
+
+/* ---------- SELECT ---------- */
+
+-- Q11: Execution order
+-- A: FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY
+
+-- Q12: SELECT specific columns
+SELECT name, country FROM customers;
+
+-- Q13: Column alias
+SELECT name AS customer_name FROM customers;
+
+-- Q14: Select non-existing column
+-- A: Error
+
+-- Q15: SELECT constant value
+SELECT 'ACTIVE' FROM customers;
+
+
+/* ---------- WHERE ---------- */
+
+-- Q16: = NULL vs IS NULL
+-- A: Use IS NULL
+SELECT * FROM customers WHERE score IS NULL;
+
+-- Q17: Aggregate in WHERE?
+-- A: Not allowed
+
+-- Q18: BETWEEN usage
+SELECT * FROM customers WHERE score BETWEEN 50 AND 100;
+
+-- Q19: LIKE 'S%'
+SELECT * FROM customers WHERE name LIKE 'S%';
+
+-- Q20: WHERE condition false?
+-- A: Row ignored
+
+
+/* ---------- DISTINCT ---------- */
+
+-- Q21: What DISTINCT removes?
+-- A: Duplicate values
+SELECT DISTINCT country FROM customers;
+
+-- Q22: DISTINCT vs GROUP BY
+-- A: GROUP BY supports aggregates
+
+-- Q23: DISTINCT on multiple columns
+SELECT DISTINCT country, score FROM customers;
+
+
+/* ---------- GROUP BY ---------- */
+
+-- Q24: Why GROUP BY needed?
+-- A: To summarize data
+SELECT country, COUNT(*) FROM customers GROUP BY country;
+
+-- Q25: Aggregate without GROUP BY
+SELECT AVG(score) FROM customers;
+
+-- Q26: GROUP BY without aggregate
+SELECT country FROM customers GROUP BY country;
+
+-- Q27: GROUP BY vs DISTINCT
+-- A: GROUP BY = summary, DISTINCT = uniqueness
+
+
+/* ---------- HAVING ---------- */
+
+-- Q28: WHERE vs HAVING
+-- A: WHERE filters rows, HAVING filters groups
+
+-- Q29: Why HAVING?
+-- A: To filter aggregates
+
+-- Q30: HAVING example
+SELECT country, COUNT(*)
+FROM customers
+GROUP BY country
+HAVING COUNT(*) > 2;
+
+
+
+/* ---------- ORDER BY & TOP ---------- */
+
+-- Q31: Default ORDER BY
+-- A: ASC
+SELECT * FROM customers ORDER BY score;
+
+-- Q32: ORDER BY vs TOP
+SELECT TOP 5 * FROM customers ORDER BY score DESC;
+
+-- Q33: TOP WITH TIES
+SELECT TOP 3 WITH TIES * FROM customers ORDER BY score DESC;
+
+-- Q34: ORDER BY without SELECT *
+SELECT name FROM customers ORDER BY name;
+
+--Q35: Same values in TOP?
+-- A: WITH TIES includes all matching rows
