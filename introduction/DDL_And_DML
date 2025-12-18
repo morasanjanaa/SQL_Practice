@@ -2,7 +2,6 @@
    STUDENT TABLE – DDL & DML PRACTICE (SQL SERVER)
    ===================================================== */
 
-
 /* ===============================
    CREATE TABLE
    =============================== */
@@ -18,8 +17,6 @@ CREATE TABLE student (
 -- Output:
 -- Table 'student' created
 
-
-
 /* ===============================
    INSERT SAMPLE DATA
    =============================== */
@@ -33,8 +30,6 @@ INSERT INTO student VALUES
 -- Output:
 -- (4 rows affected)
 
-
-
 /* ===============================
    ALTER TABLE – ADD COLUMN
    =============================== */
@@ -44,8 +39,6 @@ ADD email VARCHAR(30);
 
 -- Output:
 -- Column 'email' added
-
-
 
 /* ===============================
    ALTER TABLE – ALTER COLUMN
@@ -58,27 +51,25 @@ ALTER COLUMN email VARCHAR(70);
 -- Output:
 -- Column 'email' size increased
 
-
-
 /* ===============================
    UPDATE DATA
    =============================== */
 
 -- Update name and email for a single student
+
 UPDATE student
 SET email = 'sanjana@gmail.com',
     name  = 'MoraSanjana'
 WHERE id = 1;
 
 -- Update emails for remaining students
+
 UPDATE student SET email = 'shriya@gmail.com' WHERE id = 2;
 UPDATE student SET email = 'shruti@gmail.com' WHERE id = 3;
 UPDATE student SET email = 'yashu@gmail.com'  WHERE id = 4;
 
 -- Output:
 -- (4 rows affected)
-
-
 
 /* ===============================
    VERIFY DATA
@@ -93,11 +84,9 @@ SELECT * FROM student;
 -- 4  Yashu        AIML  50  yashu@gmail.com
 
 
-
 /* =====================================================
    DEMO TABLE – DATA COPY & CLEANUP
    ===================================================== */
-
 
 /* ===============================
    CREATE DEMO TABLE
@@ -114,8 +103,6 @@ CREATE TABLE demo (
 -- Output:
 -- Table 'demo' created
 
-
-
 /* ===============================
    INSERT DATA FROM ANOTHER TABLE
    =============================== */
@@ -131,8 +118,6 @@ FROM student;
 -- Output:
 -- (4 rows affected)
 
-
-
 /* ===============================
    ALTER TABLE – DROP COLUMN
    =============================== */
@@ -143,8 +128,6 @@ DROP COLUMN age;
 -- Output:
 -- Column 'age' dropped
 
-
-
 /* ===============================
    TRUNCATE TABLE
    =============================== */
@@ -154,8 +137,6 @@ TRUNCATE TABLE demo;
 -- Output:
 -- Table truncated (all rows removed)
 
-
-
 /* ===============================
    DROP TABLE
    =============================== */
@@ -164,7 +145,6 @@ DROP TABLE demo;
 
 -- Output:
 -- Table 'demo' dropped
-
 
 
 /* ===============================
