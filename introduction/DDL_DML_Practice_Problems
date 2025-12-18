@@ -1,0 +1,219 @@
+/* =========================================================
+    SQL PRACTICE – E-COMMERCE ORDERS DATASET
+   Table: orders
+   Purpose: End-to-end SQL (DDL + DML + Analytics)
+   ========================================================= */
+
+
+/* =========================
+   PART 1: DDL
+   ========================= */
+
+/* Q1: Create orders table with required columns */
+CREATE TABLE orders (
+    order_id INT,
+    customer_name VARCHAR(50),
+    country VARCHAR(50),
+    category VARCHAR(30),
+    order_amount BIGINT,
+    order_date DATE
+);
+/* Output: orders table created */
+
+/* Q2: Set order_id as PRIMARY KEY */
+ALTER TABLE orders
+ADD PRIMARY KEY (order_id);
+/* Output: Primary key added */
+
+/* Q3: Ensure order_amount can store large values */
+-- Already handled using BIGINT
+/* Output: order_amount supports large values */
+
+/* Q4: Ensure order_date stores only date */
+-- DATE datatype ensures this
+/* Output: Only date values allowed */
+
+
+/* =========================
+   PART 2: ALTER
+   ========================= */
+
+/* Q1: Add payment_mode column */
+ALTER TABLE orders
+ADD payment_mode VARCHAR(20);
+/* Output: Column added */
+
+/* Q2: Add discount column */
+ALTER TABLE orders
+ADD discount INT;
+/* Output: Column added */
+
+/* Q3: Change order_amount datatype */
+ALTER TABLE orders
+ALTER COLUMN order_amount BIGINT;
+/* Output: Datatype modified */
+
+/* Q4: Rename customer_name to customer */
+ALTER TABLE orders
+RENAME COLUMN customer_name TO customer;
+/* Output: Column renamed */
+
+/* Q5: Remove discount column */
+ALTER TABLE orders
+DROP COLUMN discount;
+/* Output: Column dropped */
+
+
+/* =========================
+   PART 3: DROP
+   ========================= */
+
+/* Q1: Drop orders table permanently */
+DROP TABLE orders;
+/* Output: Table deleted */
+
+/* Q2: What if table does not exist */
+-- Error will be thrown
+
+/* Q3: Drop table only if it exists */
+DROP TABLE IF EXISTS orders;
+/* Output: Table dropped safely */
+
+/* Q4: Delete all data but keep structure */
+TRUNCATE TABLE orders;
+/* Output: All records removed */
+
+/* Q5: Drop payment_mode column */
+ALTER TABLE orders
+DROP COLUMN payment_mode;
+/* Output: Column removed */
+
+
+/* =========================
+   PART 4: INSERT (Sample Dataset)
+   ========================= */
+
+/* Insert sample data */
+INSERT INTO orders VALUES
+(1,'Sanjana','India','Electronics',50000,'2024-01-10','UPI'),
+(2,'Amit','India','Clothing',3000,'2024-01-12','Card'),
+(3,'Rahul','USA','Electronics',70000,'2024-02-01','Card'),
+(4,'Neha','India','Furniture',25000,'2024-02-05','Cash'),
+(5,'John','USA','Clothing',8000,'2024-03-01','Card'),
+(6,'Priya','India','Electronics',60000,'2024-03-10','UPI'),
+(7,'Arjun','India','Clothing',4000,'2024-03-15','UPI'),
+(8,'Emily','UK','Electronics',45000,'2024-04-01','Card'),
+(9,'Suresh','India','Furniture',30000,'2024-04-05','Cash'),
+(10,'Daniel','USA','Electronics',90000,'2024-04-10','Card');
+/* Output: 10 rows inserted */
+
+
+/* =========================
+   PART 5: UPDATE
+   ========================= */
+
+/* Update order_amount for a specific order_id */
+UPDATE orders
+SET order_amount = 55000
+WHERE order_id = 1;
+/* Output: 1 row updated */
+
+/* Increase Electronics orders by 10% */
+UPDATE orders
+SET order_amount = order_amount * 1.10
+WHERE category = 'Electronics';
+/* Output: Multiple rows updated */
+
+/* Update payment_mode to UPI for Indian customers */
+UPDATE orders
+SET payment_mode = 'UPI'
+WHERE country = 'India';
+/* Output: Rows updated */
+
+
+/* =========================
+   PART 6: DELETE
+   ========================= */
+
+/* Delete order by order_id */
+DELETE FROM orders
+WHERE order_id = 7;
+/* Output: 1 row deleted */
+
+/* Delete orders from a specific country */
+DELETE FROM orders
+WHERE country = 'UK';
+/* Output: Rows deleted */
+
+/* Delete orders with low amount */
+DELETE FROM orders
+WHERE order_amount < 1000;
+/* Output: Rows deleted */
+
+/* Delete orders before 2024 */
+DELETE FROM orders
+WHERE order_date < '2024-01-01';
+/* Output: Rows deleted */
+
+/* Delete all records */
+DELETE FROM orders;
+/* Output: Table emptied */
+
+
+/* =========================
+   PART 7: SELECT & ANALYTICS
+   ========================= */
+
+/* Select all records */
+SELECT * FROM orders;
+
+/* Select specific columns */
+SELECT customer, category, order_amount FROM orders;
+
+/* Display unique categories */
+SELECT DISTINCT category FROM orders;
+
+/* Orders placed in January */
+SELECT * FROM orders
+WHERE MONTH(order_date) = 1;
+
+/* Orders with amount > 50000 */
+SELECT * FROM orders
+WHERE order_amount > 50000;
+
+/* Use table alias */
+SELECT o.* FROM orders o;
+
+/* Orders from India */
+SELECT * FROM orders
+WHERE country = 'India';
+
+/* Orders between two dates */
+SELECT * FROM orders
+WHERE order_date BETWEEN '2024-02-01' AND '2024-03-31';
+
+/* Distinct country & category */
+SELECT DISTINCT country, category FROM orders;
+
+/* Order by amount desc */
+SELECT * FROM orders
+ORDER BY order_amount DESC;
+
+/* Total sales per country */
+SELECT country, SUM(order_amount) AS total_sales
+FROM orders
+GROUP BY country;
+
+/* Countries with sales > 100000 */
+SELECT country, SUM(order_amount) AS total_sales
+FROM orders
+GROUP BY country
+HAVING SUM(order_amount) > 100000;
+
+/* Top 5 highest orders */
+SELECT *
+FROM orders
+ORDER BY order_amount DESC
+LIMIT 5;
+/* (Use TOP 5 in SQL Server) */
+
